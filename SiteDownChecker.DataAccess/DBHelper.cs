@@ -18,7 +18,7 @@ namespace MedicalVideo.DataAccess
     {
         //TODO ref to online server
         private const string ConnectionString =
-            @"Data Source=localhost;Initial Catalog=usersdb;Integrated Security=True";
+            @"Data Source=localhost;Initial Catalog=sitedownchecker;Integrated Security=True";
         
         private static SqlConnection connection;
         
