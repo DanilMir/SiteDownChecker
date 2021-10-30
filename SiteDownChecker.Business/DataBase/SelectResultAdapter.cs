@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using System.Text;
+using MedicalVideo.DataAccess;
 
-namespace DBSerializer
+namespace MedicalVideo.Business.DataBase
 {
-    public class SelectResultAdapter
+    internal readonly struct SelectResultAdapter
     {
-        private SelectResult result;
+        private readonly SelectResult result;
 
         public SelectResultAdapter(SelectResult result) =>
             this.result = result;
@@ -34,14 +33,7 @@ namespace DBSerializer
                 return default;
             var item = new T();
             for (var i = 0; i < result.ColumnsCount; ++i)
-                try
-                {
-                    typeof(T).GetProperty(result.Header[i])?.SetValue(item, result.Table[index][i]);
-                }
-                catch (Exception e)
-                {
-                    // ignored
-                }
+                typeof(T).GetProperty(result.Header[i])?.SetValue(item, result.Table[index][i]);
 
             return item;
         }

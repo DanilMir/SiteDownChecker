@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteDownChecker", "SiteDownChecker\SiteDownChecker.csproj", "{E37195F5-9D73-47E5-A9E6-86B2DCCB1241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteDownChecker.Business", "SiteDownChecker.Business\SiteDownChecker.Business.csproj", "{B754D535-AC0B-45BF-9221-72C7C2C69DE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteDownChecker.DataAccess", "SiteDownChecker.DataAccess\SiteDownChecker.DataAccess.csproj", "{14EEFCF5-280D-4907-BE13-5F336D3F1E37}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E37195F5-9D73-47E5-A9E6-86B2DCCB1241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E37195F5-9D73-47E5-A9E6-86B2DCCB1241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E37195F5-9D73-47E5-A9E6-86B2DCCB1241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E37195F5-9D73-47E5-A9E6-86B2DCCB1241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B754D535-AC0B-45BF-9221-72C7C2C69DE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B754D535-AC0B-45BF-9221-72C7C2C69DE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B754D535-AC0B-45BF-9221-72C7C2C69DE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B754D535-AC0B-45BF-9221-72C7C2C69DE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
