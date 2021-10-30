@@ -12,15 +12,15 @@ namespace MedicalVideo.Controllers
             LoginDealer.IsRegistered(LoginDealer.SetId(user))
                 ? LoginDealer.IsPasswordCorrect(user)
                     ? Ok("вы успешно вошли")
-                    : Ok("неверный пароль")//new UnauthorizedResult()
-                : new ForbidResult();
+                    : Ok("неверный пароль")
+                : Ok("вы не зарегистрированы");
 
         [HttpPost, Route(nameof(Register))]
         public ActionResult Register([FromBody] User user) =>
             LoginDealer.IsRegistered(LoginDealer.SetId(user))
-                ? Ok("ты не зареган")//new ForbidResult()
+                ? Ok("ты уже зареган")
                 : LoginDealer.TryRegisterNewUser(user)
                     ? Ok("вы успешно зарегистрировались")
-                    : Ok("чот пошло не так"); //new ForbidResult();
+                    : Ok("чот пошло не так");
     }
 }
