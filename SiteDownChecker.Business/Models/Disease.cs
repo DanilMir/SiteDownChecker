@@ -1,9 +1,10 @@
 ﻿using System;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable InconsistentNaming
 
-namespace MedicalVideo.Business.Models
+namespace SiteDownChecker.Business.Models
 {
     public class Disease
     {

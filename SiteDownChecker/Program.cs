@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace MedicalVideo
+namespace SiteDownChecker
 {
     public static class Program
     {

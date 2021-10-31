@@ -1,17 +1,17 @@
 ﻿using System;
-using MedicalVideo.Business.Models;
+using SiteDownChecker.Business.Models;
 
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable InconsistentNaming
 
-namespace MedicalVideo.Models
+namespace SiteDownChecker.Models
 {
     public class Disease :
         ApiModel,
-        IConvertibleToBusinessModel<Business.Models.Disease>,
-        IConvertibleFromBusinessModel<Disease, Business.Models.Disease>
+        IConvertibleToBusinessModel<SiteDownChecker.Business.Models.Disease>,
+        IConvertibleFromBusinessModel<Disease, SiteDownChecker.Business.Models.Disease>
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -20,7 +20,7 @@ namespace MedicalVideo.Models
 
         public override string ToString() => MakeStringFromProperties();
 
-        public Business.Models.Disease ToBusiness() => new()
+        public SiteDownChecker.Business.Models.Disease ToBusiness() => new()
         {
             Id = Id,
             Name = Name,
@@ -28,7 +28,7 @@ namespace MedicalVideo.Models
             ISC = ISC
         };
 
-        public Disease FromBusinessModel(Business.Models.Disease businessItem) => new()
+        public Disease FromBusinessModel(SiteDownChecker.Business.Models.Disease businessItem) => new()
         {
             Id = businessItem.Id,
             Name = businessItem.Name,

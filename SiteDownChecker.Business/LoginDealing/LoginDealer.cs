@@ -1,11 +1,11 @@
 ﻿using System;
-using MedicalVideo.Business.DataBase;
-using MedicalVideo.Business.Models;
-using MedicalVideo.DataAccess;
+using SiteDownChecker.Business.DataBase;
+using SiteDownChecker.Business.Models;
+using SiteDownChecker.DataAccess;
 
 // ReSharper disable CommentTypo
 
-namespace MedicalVideo.Business.LoginDealing
+namespace SiteDownChecker.Business.LoginDealing
 {
     public static class LoginDealer
     {
@@ -16,7 +16,7 @@ namespace MedicalVideo.Business.LoginDealing
         /// <returns></returns>
         public static User SetId(User user)
         {
-            var selectResult = DbHelper.SelectRequest($"select * from Users where Login = {user.Login.ToSQLString()}");
+            var selectResult = DbHelper.SelectRequest($"select * from Users where Login = {user.Login.ToSqlString()}");
             user.Id = selectResult.RowsCount is 0
                 ? Guid.NewGuid()
                 : new SelectResultAdapter(selectResult).Deserialize<User>(0).Id;
@@ -29,7 +29,7 @@ namespace MedicalVideo.Business.LoginDealing
         /// <param name="user"></param>
         /// <returns></returns>
         public static bool IsRegistered(User user) =>
-            DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSQLString()}").RowsCount is not 0;
+            DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}").RowsCount is not 0;
 
         /// <summary>
         /// важно: работает по айди
@@ -39,7 +39,7 @@ namespace MedicalVideo.Business.LoginDealing
         /// <returns></returns>
         public static bool IsPasswordCorrect(User user) =>
             user.Password ==
-            new SelectResultAdapter(DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSQLString()}"))
+            new SelectResultAdapter(DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}"))
                 .Deserialize<User>(0).Password;
 
         /// <summary>
@@ -49,10 +49,18 @@ namespace MedicalVideo.Business.LoginDealing
         /// <param name="user"></param>
         public static bool TryRegisterNewUser(User user)
         {
-            if (DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSQLString()}").RowsCount is not 0)
-                throw new Exception($"пользователь с Id ={user.Id} уже зарегистрирован");
-            Serializer<User>.Serialize(user);
-            return true;
+            try
+            {
+                if (DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}")
+                    .RowsCount is not 0)
+                    throw new Exception($"пользователь с Id ={user.Id} уже зарегистрирован");
+                Serializer<User>.Serialize(user);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -3,28 +3,20 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace MedicalVideo.DataAccess
+namespace SiteDownChecker.DataAccess
 {
-    public readonly struct SelectResult
-    {
-        public string[] Header { get; init; }
-        public List<List<object>> Table { get; init; }
-
-        public int ColumnsCount => Header.Length;
-        public int RowsCount => Table.Count;
-    }
-
     public static class DbHelper
     {
-        //TODO ref to online server
-        private const string ConnectionString =
-            @"Data Source=localhost;Initial Catalog=sitedownchecker;Integrated Security=True";
-        
+        public const string Catalog = "sitedownchecker";
+        private static readonly string connectionString =
+            $"Data Source=localhost;Initial Catalog={Catalog};Integrated Security=True";
+
+        private static readonly SqlConnection baseConnection = new(connectionString);
         private static SqlConnection connection;
         
         public static SelectResult SelectRequest(string request)
         {
-            using (connection = new SqlConnection(ConnectionString))
+            using (connection = baseConnection.Clone())
             {
                 connection.Open();
                 var command = new SqlCommand(request, connection);
@@ -53,7 +45,7 @@ namespace MedicalVideo.DataAccess
 
         public static int NonQueryRequest(string request)
         {
-            using (connection = new SqlConnection(ConnectionString))
+            using (connection = baseConnection.Clone())
             {
                 connection.Open();
                 var command = new SqlCommand(request, connection);
@@ -70,10 +62,10 @@ namespace MedicalVideo.DataAccess
             var requestStringBuilder = new StringBuilder();
             requestStringBuilder.Append($"UPDATE {tableName} SET ");
             requestStringBuilder.Append(
-                $"{columnNames[0]} = {values[0].ToSQLString()}");
+                $"{columnNames[0]} = {values[0].ToSqlString()}");
             for (var i = 1; i < columnNames.Length; ++i)
                 requestStringBuilder.Append(
-                    $", {columnNames[i]} = {values[i].ToSQLString()}");
+                    $", {columnNames[i]} = {values[i].ToSqlString()}");
             requestStringBuilder.Append($" Where Id = '{id}'");
             return NonQueryRequest(requestStringBuilder.ToString());
         }
@@ -88,9 +80,9 @@ namespace MedicalVideo.DataAccess
             for (var i = 1; i < columnNames.Length; ++i) 
                 requestStringBuilder.Append($", {columnNames[i]}");
             requestStringBuilder.Append(") VALUES (");
-            requestStringBuilder.Append(values[0].ToSQLString());
+            requestStringBuilder.Append(values[0].ToSqlString());
             for (var i = 1; i < values.Length; ++i)
-                requestStringBuilder.Append($", {values[i].ToSQLString()}");
+                requestStringBuilder.Append($", {values[i].ToSqlString()}");
             requestStringBuilder.Append(')');
             return NonQueryRequest(requestStringBuilder.ToString());
         }

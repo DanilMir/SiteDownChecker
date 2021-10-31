@@ -1,4 +1,4 @@
-﻿namespace MedicalVideo.Business.Models
+﻿namespace SiteDownChecker.Business.Models
 {
     public interface IConvertibleFromBusinessModel<out TApi ,in TBusiness>
     {

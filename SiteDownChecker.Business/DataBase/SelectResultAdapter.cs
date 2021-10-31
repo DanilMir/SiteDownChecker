@@ -1,47 +1,38 @@
 ﻿using System.Collections.Generic;
-using System.Text;
-using MedicalVideo.DataAccess;
+using System.Linq;
+using SiteDownChecker.DataAccess;
 
-namespace MedicalVideo.Business.DataBase
+namespace SiteDownChecker.Business.DataBase
 {
     internal readonly struct SelectResultAdapter
     {
-        private readonly SelectResult result;
+        private readonly SelectResult _result;
 
-        public SelectResultAdapter(SelectResult result) =>
-            this.result = result;
+        public SelectResultAdapter(SelectResult result) => _result = result;
 
-        public string ToBigString()
-        {
-            var builder = new StringBuilder();
-            foreach (var name in result.Header)
-                builder.Append($"{name}\t");
-            builder.Append('\n');
-            foreach (var item in result.Table)
-            {
-                foreach (var info in item)
-                    builder.Append($"{info} ");
-                builder.Append('\n');
-            }
-
-            return builder.ToString();
-        }
+        public override string ToString() =>
+            _result.Header.Aggregate((current, next) => current + $"{next}\t") + '\n' +
+            _result.Table
+                .Aggregate(
+                    string.Empty,
+                    (current, list) =>
+                        current + list.Aggregate(string.Empty, (s, o) => s + $"{o} ") + '\n');
 
         public T Deserialize<T>(int index) where T : new()
         {
-            if (index >= result.RowsCount)
+            if (index >= _result.RowsCount)
                 return default;
             var item = new T();
-            for (var i = 0; i < result.ColumnsCount; ++i)
-                typeof(T).GetProperty(result.Header[i])?.SetValue(item, result.Table[index][i]);
+            for (var i = 0; i < _result.ColumnsCount; ++i)
+                typeof(T).GetProperty(_result.Header[i])?.SetValue(item, _result.Table[index][i]);
 
             return item;
         }
 
         public List<T> DeserializeAll<T>() where T : new()
         {
-            var list = new List<T>(result.RowsCount);
-            for (var i = 0; i < result.RowsCount; ++i)
+            var list = new List<T>(_result.RowsCount);
+            for (var i = 0; i < _result.RowsCount; ++i)
                 list.Add(Deserialize<T>(i));
             return list;
         }

@@ -1,8 +1,10 @@
-﻿using MedicalVideo.Business.LoginDealing;
-using MedicalVideo.Business.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SiteDownChecker.Business.LoginDealing;
+using SiteDownChecker.Business.Models;
 
-namespace MedicalVideo.Controllers
+// ReSharper disable StringLiteralTypo
+
+namespace SiteDownChecker.Controllers
 {
     [ApiController, Route("[controller]")]
     public class EnteringController : Controller

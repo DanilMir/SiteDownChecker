@@ -1,8 +1,9 @@
 ﻿using System;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace MedicalVideo.Business.Models
+namespace SiteDownChecker.Business.Models
 {
     public class Area : IConvertibleToBusinessModel<Area>, IConvertibleFromBusinessModel<Area, Area>
     {

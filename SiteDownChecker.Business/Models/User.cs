@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MedicalVideo.Business.Models
+namespace SiteDownChecker.Business.Models
 {
     public class User : IConvertibleFromBusinessModel<User, User>, IConvertibleToBusinessModel<User>
     {

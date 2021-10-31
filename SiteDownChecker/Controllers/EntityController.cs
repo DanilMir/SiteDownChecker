@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MedicalVideo.Business.DataBase;
-using MedicalVideo.Business.Models;
 using Microsoft.AspNetCore.Mvc;
+using SiteDownChecker.Business.DataBase;
+using SiteDownChecker.Business.Models;
 
-namespace MedicalVideo.Controllers
+namespace SiteDownChecker.Controllers
 {
     public class EntityController<TApi, TBusiness> : ControllerBase
         where TBusiness : new()

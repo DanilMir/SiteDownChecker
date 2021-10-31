@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using MedicalVideo.DataAccess;
+using SiteDownChecker.DataAccess;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable CommentTypo
@@ -11,7 +11,7 @@ using MedicalVideo.DataAccess;
 // ReSharper disable StringLiteralTypo
 // ReSharper disable PossibleNullReferenceException
 
-namespace MedicalVideo.Business.DataBase
+namespace SiteDownChecker.Business.DataBase
 {
     /// <summary>
     /// класс умеет сериализировать все публичные свойства любых типов в базу данных, и десериализировать их из базы,
@@ -58,7 +58,7 @@ namespace MedicalVideo.Business.DataBase
                 idProperty.SetValue(item, Guid.NewGuid());
 
             generalPropertyNames ??= DbHelper.SelectRequest(
-                    $"SELECT COLUMN_NAME FROM usersdb.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'{tableName}'")
+                    $"SELECT COLUMN_NAME FROM {DbHelper.Catalog}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'{tableName}'")
                 .Table.Select(line => line[0] as string)
                 .Where(name => type.GetProperties().Select(property => property.Name).Contains(name)).ToArray();
 
@@ -107,13 +107,13 @@ namespace MedicalVideo.Business.DataBase
                         if (value as Guid? != Guid.Empty)
                         {
                             thereIsAFilter = true;
-                            whereBuilder.Append($"Id = {value.ToSQLString()} AND ");
+                            whereBuilder.Append($"Id = {value.ToSqlString()} AND ");
                         }
 
                         break;
                     case (_, not null):
                         thereIsAFilter = true;
-                        whereBuilder.Append($"{property.Name} = {value.ToSQLString()} AND ");
+                        whereBuilder.Append($"{property.Name} = {value.ToSqlString()} AND ");
                         break;
                 }
             }
