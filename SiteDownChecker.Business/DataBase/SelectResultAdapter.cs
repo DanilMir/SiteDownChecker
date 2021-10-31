@@ -6,9 +6,9 @@ namespace SiteDownChecker.Business.DataBase
 {
     internal readonly struct SelectResultAdapter
     {
-        private readonly SelectResult _result;
+        private readonly OldSelectResult _result;
 
-        public SelectResultAdapter(SelectResult result) => _result = result;
+        public SelectResultAdapter(OldSelectResult result) => _result = result;
 
         public override string ToString() =>
             _result.Header.Aggregate((current, next) => current + $"{next}\t") + '\n' +

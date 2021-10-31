@@ -16,7 +16,7 @@ namespace SiteDownChecker.Business.LoginDealing
         /// <returns></returns>
         public static User SetId(User user)
         {
-            var selectResult = DbHelper.SelectRequest($"select * from Users where Login = {user.Login.ToSqlString()}");
+            var selectResult = OldDbHelper.SelectRequest($"select * from Users where Login = {user.Login.ToSqlString()}");
             user.Id = selectResult.RowsCount is 0
                 ? Guid.NewGuid()
                 : new SelectResultAdapter(selectResult).Deserialize<User>(0).Id;
@@ -29,7 +29,7 @@ namespace SiteDownChecker.Business.LoginDealing
         /// <param name="user"></param>
         /// <returns></returns>
         public static bool IsRegistered(User user) =>
-            DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}").RowsCount is not 0;
+            OldDbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}").RowsCount is not 0;
 
         /// <summary>
         /// важно: работает по айди
@@ -39,7 +39,7 @@ namespace SiteDownChecker.Business.LoginDealing
         /// <returns></returns>
         public static bool IsPasswordCorrect(User user) =>
             user.Password ==
-            new SelectResultAdapter(DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}"))
+            new SelectResultAdapter(OldDbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}"))
                 .Deserialize<User>(0).Password;
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace SiteDownChecker.Business.LoginDealing
         {
             try
             {
-                if (DbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}")
+                if (OldDbHelper.SelectRequest($"select * from Users where Id = {user.Id.ToSqlString()}")
                     .RowsCount is not 0)
                     throw new Exception($"пользователь с Id ={user.Id} уже зарегистрирован");
                 Serializer<User>.Serialize(user);

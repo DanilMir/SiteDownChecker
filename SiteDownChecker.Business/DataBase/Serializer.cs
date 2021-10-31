@@ -27,11 +27,11 @@ namespace SiteDownChecker.Business.DataBase
         where TBusiness : new()
     {
         public static TBusiness DeserializeFromId(Guid id) =>
-            new SelectResultAdapter(DbHelper.SelectRequest($"select * from {type.Name}s where Id = '{id}'"))
+            new SelectResultAdapter(OldDbHelper.SelectRequest($"select * from {type.Name}s where Id = '{id}'"))
                 .Deserialize<TBusiness>(0);
 
         public static List<TBusiness> DeserializeAll() =>
-            new SelectResultAdapter(DbHelper.SelectRequest($"select * from {type.Name}s"))
+            new SelectResultAdapter(OldDbHelper.SelectRequest($"select * from {type.Name}s"))
                 .DeserializeAll<TBusiness>();
 
         private static string[] generalPropertyNames;
@@ -57,21 +57,21 @@ namespace SiteDownChecker.Business.DataBase
             if (idProperty.GetValue(item) as Guid? == Guid.Empty)
                 idProperty.SetValue(item, Guid.NewGuid());
 
-            generalPropertyNames ??= DbHelper.SelectRequest(
-                    $"SELECT COLUMN_NAME FROM {DbHelper.Catalog}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'{tableName}'")
+            generalPropertyNames ??= OldDbHelper.SelectRequest(
+                    $"SELECT COLUMN_NAME FROM {OldDbHelper.Catalog}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'{tableName}'")
                 .Table.Select(line => line[0] as string)
                 .Where(name => type.GetProperties().Select(property => property.Name).Contains(name)).ToArray();
 
             var values = generalPropertyNames.Select(x => type.GetProperty(x).GetValue(item)).ToArray();
             var id = type.GetProperty("Id").GetValue(item);
 
-            _ = DbHelper.SelectRequest($"select * from {tableName} where Id = '{id}'").RowsCount == 0
+            _ = OldDbHelper.SelectRequest($"select * from {tableName} where Id = '{id}'").RowsCount == 0
                 ? onlyUpdate
                     ? throw new Exception($"cant find object with id = '{id}'")
-                    : DbHelper.InsertRequest(tableName, generalPropertyNames, values)
+                    : OldDbHelper.InsertRequest(tableName, generalPropertyNames, values)
                 : onlyInsert
                     ? throw new Exception($"object with id = '{id}' already exists")
-                    : DbHelper.UpdateByIdRequest(tableName, (Guid) type.GetProperty("Id").GetValue(item),
+                    : OldDbHelper.UpdateByIdRequest(tableName, (Guid) type.GetProperty("Id").GetValue(item),
                         generalPropertyNames, values);
         }
 
@@ -88,7 +88,7 @@ namespace SiteDownChecker.Business.DataBase
         public static void Insert(TBusiness item) => Serialize(item, false, true);
 
         public static void DeleteById(Guid id) =>
-            DbHelper.NonQueryRequest($"delete from {tableName} where Id = '{id}'");
+            OldDbHelper.NonQueryRequest($"delete from {tableName} where Id = '{id}'");
 
         private static PropertyInfo[] properties;
 
@@ -120,7 +120,7 @@ namespace SiteDownChecker.Business.DataBase
             
             return thereIsAFilter
                 ? new SelectResultAdapter(
-                        DbHelper.SelectRequest(
+                        OldDbHelper.SelectRequest(
                             $"SELECT * FROM {tableName} WHERE {whereBuilder.Remove(whereBuilder.Length - 5, 5)}"))
                     .DeserializeAll<TBusiness>()
                 : DeserializeAll();
