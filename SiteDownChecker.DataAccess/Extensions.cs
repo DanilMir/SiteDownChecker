@@ -15,5 +15,8 @@ namespace SiteDownChecker.DataAccess
 
         public static SqlConnection Clone(this SqlConnection connection) =>
             (SqlConnection) ((ICloneable) connection).Clone();
+
+        public static string ToSqlTableName(this Type type) =>
+            $"{type.Name}s";
     }
 }

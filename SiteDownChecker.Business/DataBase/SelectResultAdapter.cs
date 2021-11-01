@@ -11,28 +11,25 @@ namespace SiteDownChecker.Business.DataBase
         public SelectResultAdapter(SelectResult result) => _result = result;
 
         public override string ToString() =>
-            _result.Header.Aggregate((current, next) => current + $"{next}\t") + '\n' +
-            _result.Table
-                .Aggregate(
-                    string.Empty,
-                    (current, list) =>
-                        current + list.Aggregate(string.Empty, (s, o) => s + $"{o} ") + '\n');
+            _result.Names.Aggregate((s, t) => $"{s}\t{t}")
+            + '\n'
+            + _result.Aggregate(string.Empty, (current, nextObject) =>
+                $"{current}{nextObject.Names.Aggregate((curr, next) => $"{curr}\t{nextObject[next]}")}\n");
 
         public T Deserialize<T>(int index) where T : new()
         {
-            if (index >= _result.RowsCount)
+            if (index >= _result.Count)
                 return default;
             var item = new T();
-            for (var i = 0; i < _result.ColumnsCount; ++i)
-                typeof(T).GetProperty(_result.Header[i])?.SetValue(item, _result.Table[index][i]);
-
+            foreach (var name in _result.Names)
+                typeof(T).GetProperty(name)?.SetValue(item, _result[index, name]);
             return item;
         }
 
         public List<T> DeserializeAll<T>() where T : new()
         {
-            var list = new List<T>(_result.RowsCount);
-            for (var i = 0; i < _result.RowsCount; ++i)
+            var list = new List<T>(_result.Count);
+            for (var i = 0; i < _result.Count; ++i)
                 list.Add(Deserialize<T>(i));
             return list;
         }
