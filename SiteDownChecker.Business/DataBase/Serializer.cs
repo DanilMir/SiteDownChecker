@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using System.Threading.Tasks;
 using SiteDownChecker.DataAccess;
 
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable CommentTypo
 // ReSharper disable StaticMemberInGenericType
-// ReSharper disable StringLiteralTypo
-// ReSharper disable PossibleNullReferenceException
+// ReSharper disable CommentTypo
 
 namespace SiteDownChecker.Business.DataBase
 {
@@ -27,17 +24,15 @@ namespace SiteDownChecker.Business.DataBase
         where TBusiness : new()
     {
         public static TBusiness DeserializeFromId(Guid id) =>
-            new SelectResultAdapter(OldDbHelper.SelectRequest($"select * from {type.Name}s where Id = '{id}'"))
+            new SelectResultAdapter(DbHelper.SelectWithFilter(tableName, new SqlValuePair("Id", id)))
                 .Deserialize<TBusiness>(0);
 
         public static List<TBusiness> DeserializeAll() =>
-            new SelectResultAdapter(OldDbHelper.SelectRequest($"select * from {type.Name}s"))
-                .DeserializeAll<TBusiness>();
+            new SelectResultAdapter(DbHelper.SelectWithFilter(tableName)).DeserializeAll<TBusiness>();
 
-        private static string[] generalPropertyNames;
+        private static IReadOnlyCollection<string> generalPropertyNames;
         private static readonly Type type = typeof(TBusiness);
-        private static readonly PropertyInfo idProperty = type.GetProperty("Id");
-        private static readonly string tableName = $"{type.Name}s";
+        private static readonly string tableName = type.ToSqlTableName();
 
         /// <summary>
         /// метод создает или обновляет соответствующий обьект в базе данных
@@ -50,80 +45,104 @@ namespace SiteDownChecker.Business.DataBase
         /// <param name="item">обьект сериализации</param>
         /// <param name="onlyUpdate">если нужно только обновить</param>
         /// <param name="onlyInsert">если нужно только вставить</param>
-        public static void Serialize(TBusiness item, bool onlyUpdate = default, bool onlyInsert = default)
+        public static bool TrySerialize(TBusiness item, bool onlyUpdate = default, bool onlyInsert = default)
         {
-            //пока мой код никто не проверяет, мне дозволено так делать
-
-            if (idProperty.GetValue(item) as Guid? == Guid.Empty)
-                idProperty.SetValue(item, Guid.NewGuid());
-
-            generalPropertyNames ??= OldDbHelper.SelectRequest(
-                    $"SELECT COLUMN_NAME FROM {OldDbHelper.Catalog}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'{tableName}'")
-                .Table.Select(line => line[0] as string)
-                .Where(name => type.GetProperties().Select(property => property.Name).Contains(name)).ToArray();
-
-            var values = generalPropertyNames.Select(x => type.GetProperty(x).GetValue(item)).ToArray();
-            var id = type.GetProperty("Id").GetValue(item);
-
-            _ = OldDbHelper.SelectRequest($"select * from {tableName} where Id = '{id}'").RowsCount == 0
+            generalPropertyNames ??= CreateGeneralPropertyNames();
+            var id = ProcessId(item);
+            return DbHelper.SelectWithFilter(tableName, new SqlValuePair("Id", id)).Count is 0
                 ? onlyUpdate
                     ? throw new Exception($"cant find object with id = '{id}'")
-                    : OldDbHelper.InsertRequest(tableName, generalPropertyNames, values)
+                    : DbHelper.TryInsert(tableName, CreatePairs(item))
                 : onlyInsert
                     ? throw new Exception($"object with id = '{id}' already exists")
-                    : OldDbHelper.UpdateByIdRequest(tableName, (Guid) type.GetProperty("Id").GetValue(item),
-                        generalPropertyNames, values);
+                    : DbHelper.TryUpdateById(tableName, id, CreatePairs(item));
         }
 
-        /// <summary>
-        /// вызывает Serialize с указанием, что нужно только обновить
-        /// </summary>
-        /// <param name="item"></param>
-        public static void Update(TBusiness item) => Serialize(item, true);
+        public static async Task<bool> TrySerializeAsync(TBusiness item, bool onlyUpdate = default,
+            bool onlyInsert = default)
+        {
+            var gpnCreatingTask = generalPropertyNames is null ? CreateGeneralPropertyNamesAsync() : null;
+            var id = ProcessId(item);
+            return (await DbHelper.SelectWithFilterAsync(tableName, new SqlValuePair("Id", id))).Count is 0
+                ? onlyUpdate
+                    ? throw new Exception($"cant find object with id = '{id}'")
+                    : await DbHelper.TryInsertAsync(tableName, await CreatePairsAsync(item, gpnCreatingTask))
+                : onlyInsert
+                    ? throw new Exception($"object with id = '{id}' already exists")
+                    : await DbHelper.TryUpdateByIdAsync(tableName, id, await CreatePairsAsync(item, gpnCreatingTask));
+        }
+
+        private static Guid ProcessId(TBusiness item)
+        {
+            var id = item.GetValue<Guid>("Id", type);
+            if (id == Guid.Empty)
+                item.SetValue("Id", id = Guid.NewGuid(), type);
+            return id;
+        }
+
+        //TODO ToArray
+        private static SqlValuePair[] CreatePairs(TBusiness item) => generalPropertyNames.Select(name =>
+            new SqlValuePair(name, type.GetProperty(name)?.GetValue(item))).ToArray();
+
+        private static async Task<SqlValuePair[]> CreatePairsAsync(
+            TBusiness item,
+            Task<IReadOnlyCollection<string>> gpnCreatingTask)
+            =>
+                (generalPropertyNames ??= await gpnCreatingTask).Select(name =>
+                    new SqlValuePair(name, type.GetProperty(name)?.GetValue(item))).ToArray();
+
+        #region generalPropertyNames
+
+        private static readonly string generalPropertyNamesSelectRequest =
+            $"SELECT COLUMN_NAME FROM {DbRequestDealer.Catalog}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'{tableName}'";
+
+        private static IReadOnlyCollection<string> CreateGeneralPropertyNames() =>
+            ProcessGeneralPropertyNames(DbRequestDealer.SelectRequest(generalPropertyNamesSelectRequest));
+
+        private static async Task<IReadOnlyCollection<string>> CreateGeneralPropertyNamesAsync() =>
+            ProcessGeneralPropertyNames(await DbRequestDealer.SelectRequestAsync(generalPropertyNamesSelectRequest));
+
+        private static IReadOnlyCollection<string> ProcessGeneralPropertyNames(SelectResult selectResult) =>
+            selectResult
+                .Select(resultObject => resultObject["COLUMN_NAME"] as string)
+                .Where(name => type.GetProperties().Select(property => property.Name).Contains(name)).ToArray();
+
+        #endregion
 
         /// <summary>
-        /// вызывает Serialize с указанием, что нужно только вставить
+        /// вызывает TrySerialize с указанием, что нужно только обновить
         /// </summary>
         /// <param name="item"></param>
-        public static void Insert(TBusiness item) => Serialize(item, false, true);
+        public static bool TryUpdate(TBusiness item) => TrySerialize(item, true);
 
-        public static void DeleteById(Guid id) =>
-            OldDbHelper.NonQueryRequest($"delete from {tableName} where Id = '{id}'");
+        public static async Task<bool> TryUpdateAsync(TBusiness item) => await TrySerializeAsync(item, true);
+
+        /// <summary>
+        /// вызывает TrySerialize с указанием, что нужно только вставить
+        /// </summary>
+        /// <param name="item"></param>
+        public static bool TryInsert(TBusiness item) => TrySerialize(item, false, true);
+
+        public static async Task<bool> TryInsertAsync(TBusiness item) => await TrySerializeAsync(item, false, true);
+
+
+        public static List<TBusiness> DeserializeWithFilter(TBusiness filter) =>
+            new SelectResultAdapter(
+                    DbHelper.SelectWithFilter(type.ToSqlTableName(),
+                        (IReadOnlyCollection<SqlValuePair>) CreateDeserializePairs(filter)))
+                .DeserializeAll<TBusiness>();
+        
+        public static async Task<List<TBusiness>> DeserializeWithFilterAsync(TBusiness filter) =>
+            new SelectResultAdapter(
+                    await DbHelper.SelectWithFilterAsync(type.ToSqlTableName(),
+                        (IReadOnlyCollection<SqlValuePair>) CreateDeserializePairs(filter)))
+                .DeserializeAll<TBusiness>();
 
         private static PropertyInfo[] properties;
 
-        public static List<TBusiness> DeserializeWithFilter(TBusiness filter)
-        {
-            properties ??= type.GetProperties();
-
-            var whereBuilder = new StringBuilder();
-            var thereIsAFilter = false;
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(filter);
-                switch (property.Name, value)
-                {
-                    case ("Id", _):
-                        if (value as Guid? != Guid.Empty)
-                        {
-                            thereIsAFilter = true;
-                            whereBuilder.Append($"Id = {value.ToSqlString()} AND ");
-                        }
-
-                        break;
-                    case (_, not null):
-                        thereIsAFilter = true;
-                        whereBuilder.Append($"{property.Name} = {value.ToSqlString()} AND ");
-                        break;
-                }
-            }
-            
-            return thereIsAFilter
-                ? new SelectResultAdapter(
-                        OldDbHelper.SelectRequest(
-                            $"SELECT * FROM {tableName} WHERE {whereBuilder.Remove(whereBuilder.Length - 5, 5)}"))
-                    .DeserializeAll<TBusiness>()
-                : DeserializeAll();
-        }
+        private static IEnumerable<SqlValuePair> CreateDeserializePairs(TBusiness filter) =>
+            (properties ??= type.GetProperties())
+            .Select(property => new SqlValuePair(property.Name, property.GetValue(filter)))
+            .Where(pair => pair.Value is not null);
     }
 }

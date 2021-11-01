@@ -9,22 +9,31 @@ namespace SiteDownChecker.DataAccess
     {
         #region select
 
-        public static SelectResult SelectWithFilter(string tableName, IReadOnlyList<SqlValuePair> filters) =>
+        public static SelectResult SelectWithFilter(string tableName, params SqlValuePair[] filters) =>
+            SelectWithFilter(tableName, (IReadOnlyCollection<SqlValuePair>) filters);
+        
+        public static SelectResult SelectWithFilter(string tableName, IReadOnlyCollection<SqlValuePair> filters) =>
             DbRequestDealer.SelectRequest(CreateSelectRequest(tableName, filters));
 
         public static async Task<SelectResult> SelectWithFilterAsync(
             string tableName,
-            IReadOnlyList<SqlValuePair> filters)
+            params SqlValuePair[] filters)
+            =>
+                await SelectWithFilterAsync(tableName, (IReadOnlyCollection<SqlValuePair>) filters);
+
+        public static async Task<SelectResult> SelectWithFilterAsync(
+            string tableName,
+            IReadOnlyCollection<SqlValuePair> filters)
             =>
                 await DbRequestDealer.SelectRequestAsync(CreateSelectRequest(tableName, filters));
 
         private static string CreateSelectRequest(
             string tableName,
-            IReadOnlyList<SqlValuePair> filters)
+            IReadOnlyCollection<SqlValuePair> filters)
             =>
                 $"SELECT * FROM {tableName}" +
                 (filters.Count is not 0
-                    ? $" WHERE {filters.Skip(1).Aggregate($"{filters[0]}", (s, pair) => $"{s} AND {pair})")}"
+                    ? $" WHERE {filters.Skip(1).Aggregate($"{filters.First()}", (s, pair) => $"{s} AND {pair})")}"
                     : string.Empty);
 
         #endregion
@@ -52,7 +61,7 @@ namespace SiteDownChecker.DataAccess
                 await DbRequestDealer.NonQueryRequestAsync(CreateUpdateRequest(tableName, id, values)) is not 0;
 
         private static string CreateUpdateRequest(string tableName, Guid id, IReadOnlyList<SqlValuePair> values) =>
-            $"UPDATE {tableName} SET " 
+            $"UPDATE {tableName} SET "
             + values.Skip(1).Aggregate($"{values[0]}", (s, pair) => $"{s}, {pair}") +
             $" WHERE Id = {id.ToSqlString()}";
 
@@ -62,15 +71,15 @@ namespace SiteDownChecker.DataAccess
 
         public static bool TryInsert(string tableName, IReadOnlyList<SqlValuePair> values) =>
             DbRequestDealer.NonQueryRequest(CreateInsertRequest(tableName, values)) is not 0;
-        
+
         public static async Task<bool> TryInsertAsync(string tableName, IReadOnlyList<SqlValuePair> values) =>
             await DbRequestDealer.NonQueryRequestAsync(CreateInsertRequest(tableName, values)) is not 0;
-        
+
         private static string CreateInsertRequest(string tableName, IReadOnlyList<SqlValuePair> values) =>
             $"INSERT INTO {tableName} ("
             + values.Skip(1).Aggregate(values[0].Name, (s, pair) => $"{s}, {pair.Name}")
             + ") VALUES ("
-            + values.Skip(1).Aggregate(values[0].ValueString, (s, pair) => $"{s}, {pair.ValueString}") 
+            + values.Skip(1).Aggregate(values[0].ValueString, (s, pair) => $"{s}, {pair.ValueString}")
             + ")";
 
         #endregion

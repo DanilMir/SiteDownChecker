@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SiteDownChecker.Business.DataBase;
 using SiteDownChecker.Business.Models;
+using SiteDownChecker.DataAccess;
 
 namespace SiteDownChecker.Controllers
 {
@@ -22,13 +23,13 @@ namespace SiteDownChecker.Controllers
             uselessInstance.FromBusinessModel(Serializer<TBusiness>.DeserializeFromId(id));
 
         [HttpPost]
-        public virtual void Create([FromBody] TApi item) => Serializer<TBusiness>.Insert(item.ToBusiness());
+        public virtual bool Create([FromBody] TApi item) => Serializer<TBusiness>.TryInsert(item.ToBusiness());
 
         [HttpPut("{id:Guid}")]
-        public virtual void Update([FromBody] TApi item) => Serializer<TBusiness>.Update(item.ToBusiness());
+        public virtual bool Update([FromBody] TApi item) => Serializer<TBusiness>.TryUpdate(item.ToBusiness());
 
         [HttpDelete("{id:Guid}")]
-        public virtual void Delete(Guid id) => Serializer<TBusiness>.DeleteById(id);
+        public virtual bool Delete(Guid id) => DbHelper.TryDeleteById(typeof(TBusiness).ToSqlTableName(), id);
 
         [HttpGet]
         public virtual IEnumerable<TApi> GetWithFilter([FromQuery] TApi item) =>

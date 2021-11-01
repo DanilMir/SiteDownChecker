@@ -8,19 +8,21 @@ namespace SiteDownChecker.DataAccess
     {
         private readonly Dictionary<string, List<object>> _dictionary;
         public object this[int index, string name] => _dictionary[name][index];
-        public SelectResultObject this[int index] => new(index, _dictionary);
+        public SelectResultObject this[int index] => new(index, _dictionary, Names);
         public ReadOnlyCollection<string> Names { get; }
         public int Count => _dictionary[Names[0]].Count;
 
-        public SelectResult(IList<string> names)
+        public SelectResult(ReadOnlyCollection<string> names)
         {
             if (names.Count is 0)
                 throw new Exception("names count can't be 0");
-            Names = new ReadOnlyCollection<string>(names);
+            Names = names;
             _dictionary = new Dictionary<string, List<object>>();
-            foreach (var name in Names) 
+            foreach (var name in Names)
                 _dictionary[name] = new List<object>();
         }
+
+        public SelectResult(IList<string> names) : this(new ReadOnlyCollection<string>(names)) { }
 
         public void Add(IEnumerable<object> objects)
         {
