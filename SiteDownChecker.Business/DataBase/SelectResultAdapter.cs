@@ -18,8 +18,6 @@ namespace SiteDownChecker.Business.DataBase
 
         public T Deserialize<T>(int index) where T : new()
         {
-            if (index >= _result.Count)
-                return default;
             var item = new T();
             foreach (var name in _result.Names)
                 typeof(T).GetProperty(name)?.SetValue(item, _result[index, name]);

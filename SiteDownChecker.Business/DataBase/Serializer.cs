@@ -131,7 +131,7 @@ namespace SiteDownChecker.Business.DataBase
                     DbHelper.SelectWithFilter(type.ToSqlTableName(),
                         CreateDeserializePairs(filter).ToArray()))
                 .DeserializeAll<TBusiness>();
-        
+
         public static async Task<List<TBusiness>> DeserializeWithFilterAsync(TBusiness filter) =>
             new SelectResultAdapter(
                     await DbHelper.SelectWithFilterAsync(type.ToSqlTableName(),
@@ -143,6 +143,6 @@ namespace SiteDownChecker.Business.DataBase
         private static IEnumerable<SqlValuePair> CreateDeserializePairs(TBusiness filter) =>
             (properties ??= type.GetProperties())
             .Select(property => new SqlValuePair(property.Name, property.GetValue(filter)))
-            .Where(pair => pair.Value is not null);
+            .Where(pair => pair.Value is not null && !pair.Value.Equals(Guid.Empty));
     }
 }

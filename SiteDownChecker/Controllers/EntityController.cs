@@ -32,9 +32,12 @@ namespace SiteDownChecker.Controllers
         public virtual bool Delete(Guid id) => DbHelper.TryDeleteById(typeof(TBusiness).ToSqlTableName(), id);
 
         [HttpGet]
-        public virtual IEnumerable<TApi> GetWithFilter([FromQuery] TApi item) =>
-            Serializer<TBusiness>
+        public virtual IEnumerable<TApi> GetWithFilter([FromQuery] TApi item)
+        {
+            Console.WriteLine($"getting {item}");
+            return Serializer<TBusiness>
                 .DeserializeWithFilter(item.ToBusiness())
                 .Select(x => uselessInstance.FromBusinessModel(x));
+        }
     }
 }

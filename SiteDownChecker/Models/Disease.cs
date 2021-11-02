@@ -1,11 +1,6 @@
 ﻿using System;
 using SiteDownChecker.Business.Models;
 
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable InconsistentNaming
-
 namespace SiteDownChecker.Models
 {
     public class Disease :
