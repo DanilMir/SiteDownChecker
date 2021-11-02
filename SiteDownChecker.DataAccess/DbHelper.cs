@@ -33,7 +33,7 @@ namespace SiteDownChecker.DataAccess
             =>
                 $"SELECT * FROM {tableName}" +
                 (filters.Count is not 0
-                    ? $" WHERE {filters.Skip(1).Aggregate($"{filters.First()}", (s, pair) => $"{s} AND {pair})")}"
+                    ? $" WHERE {filters.Skip(1).Aggregate($"{filters.First()}", (s, pair) => $"{s} AND {pair}")}"
                     : string.Empty);
 
         #endregion

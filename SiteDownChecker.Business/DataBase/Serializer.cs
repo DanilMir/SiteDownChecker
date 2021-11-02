@@ -129,7 +129,7 @@ namespace SiteDownChecker.Business.DataBase
         public static List<TBusiness> DeserializeWithFilter(TBusiness filter) =>
             new SelectResultAdapter(
                     DbHelper.SelectWithFilter(type.ToSqlTableName(),
-                        (IReadOnlyCollection<SqlValuePair>) CreateDeserializePairs(filter)))
+                        CreateDeserializePairs(filter).ToArray()))
                 .DeserializeAll<TBusiness>();
         
         public static async Task<List<TBusiness>> DeserializeWithFilterAsync(TBusiness filter) =>
