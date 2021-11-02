@@ -9,7 +9,6 @@ using SiteDownChecker.Business.Models;
 namespace SiteDownChecker.Models
 {
     public class Disease :
-        ApiModel,
         IConvertibleToBusinessModel<SiteDownChecker.Business.Models.Disease>,
         IConvertibleFromBusinessModel<Disease, SiteDownChecker.Business.Models.Disease>
     {
@@ -18,7 +17,7 @@ namespace SiteDownChecker.Models
         public int? Grade { get; set; }
         public string ISC { get; set; }
 
-        public override string ToString() => MakeStringFromProperties();
+        public override string ToString() => $"[Id = {Id}, Name = {Name}, Grade = {Grade}, ISC = {ISC}]";
 
         public SiteDownChecker.Business.Models.Disease ToBusiness() => new()
         {
