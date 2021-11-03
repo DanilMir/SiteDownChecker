@@ -23,12 +23,34 @@ namespace SiteDownChecker.Business.DataBase
     public static class Serializer<TBusiness>
         where TBusiness : new()
     {
-        public static TBusiness DeserializeFromId(Guid id) =>
-            new SelectResultAdapter(DbHelper.SelectWithFilter(tableName, new SqlValuePair("Id", id)))
-                .Deserialize<TBusiness>(0);
+        /// <summary>
+        /// ищет обьект с данным id, десериализирует, если находит, иначе возвращает default
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>найенный обьект или default, если обьект не найден</returns>
+        public static TBusiness DeserializeFromId(Guid id)
+        {
+            var selectResult = DbHelper.SelectWithFilter(tableName, new SqlValuePair("Id", id));
+            return selectResult.Count is 0
+                ? default
+                : new SelectResultAdapter(selectResult)
+                    .Deserialize<TBusiness>(0);
+        }
+
+        public static async Task<TBusiness> DeserializeFromIdAsync(Guid id)
+        {
+            var selectResult = await DbHelper.SelectWithFilterAsync(tableName, new SqlValuePair("Id", id));
+            return selectResult.Count is 0
+                ? default
+                : new SelectResultAdapter(selectResult)
+                    .Deserialize<TBusiness>(0);
+        }
 
         public static List<TBusiness> DeserializeAll() =>
             new SelectResultAdapter(DbHelper.SelectWithFilter(tableName)).DeserializeAll<TBusiness>();
+
+        public static async Task<List<TBusiness>> DeserializeAllAsync() =>
+            new SelectResultAdapter(await DbHelper.SelectWithFilterAsync(tableName)).DeserializeAll<TBusiness>();
 
         private static IReadOnlyCollection<string> generalPropertyNames;
         private static readonly Type type = typeof(TBusiness);
@@ -50,12 +72,8 @@ namespace SiteDownChecker.Business.DataBase
             generalPropertyNames ??= CreateGeneralPropertyNames();
             var id = ProcessId(item);
             return DbHelper.SelectWithFilter(tableName, new SqlValuePair("Id", id)).Count is 0
-                ? onlyUpdate
-                    ? throw new Exception($"cant find object with id = '{id}'")
-                    : DbHelper.TryInsert(tableName, CreatePairs(item))
-                : onlyInsert
-                    ? throw new Exception($"object with id = '{id}' already exists")
-                    : DbHelper.TryUpdateById(tableName, id, CreatePairs(item));
+                ? !onlyUpdate && DbHelper.TryInsert(tableName, CreatePairs(item))
+                : !onlyInsert && DbHelper.TryUpdateById(tableName, id, CreatePairs(item));
         }
 
         public static async Task<bool> TrySerializeAsync(TBusiness item, bool onlyUpdate = default,
@@ -80,9 +98,8 @@ namespace SiteDownChecker.Business.DataBase
             return id;
         }
 
-        //TODO ToArray
-        private static SqlValuePair[] CreatePairs(TBusiness item) => generalPropertyNames.Select(name =>
-            new SqlValuePair(name, type.GetProperty(name)?.GetValue(item))).ToArray();
+        private static IEnumerable<SqlValuePair> CreatePairs(TBusiness item) => generalPropertyNames.Select(name =>
+            new SqlValuePair(name, type.GetProperty(name)?.GetValue(item)));
 
         private static async Task<SqlValuePair[]> CreatePairsAsync(
             TBusiness item,
@@ -135,7 +152,7 @@ namespace SiteDownChecker.Business.DataBase
         public static async Task<List<TBusiness>> DeserializeWithFilterAsync(TBusiness filter) =>
             new SelectResultAdapter(
                     await DbHelper.SelectWithFilterAsync(type.ToSqlTableName(),
-                        (IReadOnlyCollection<SqlValuePair>) CreateDeserializePairs(filter)))
+                        CreateDeserializePairs(filter)))
                 .DeserializeAll<TBusiness>();
 
         private static PropertyInfo[] properties;

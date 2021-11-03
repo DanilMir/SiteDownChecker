@@ -12,27 +12,27 @@ namespace SiteDownChecker.DataAccess
         public static SelectResult SelectWithFilter(string tableName, params SqlValuePair[] filters) =>
             SelectWithFilter(tableName, (IReadOnlyCollection<SqlValuePair>) filters);
         
-        public static SelectResult SelectWithFilter(string tableName, IReadOnlyCollection<SqlValuePair> filters) =>
+        public static SelectResult SelectWithFilter(string tableName, IEnumerable<SqlValuePair> filters) =>
             DbRequestDealer.SelectRequest(CreateSelectRequest(tableName, filters));
 
         public static async Task<SelectResult> SelectWithFilterAsync(
             string tableName,
             params SqlValuePair[] filters)
             =>
-                await SelectWithFilterAsync(tableName, (IReadOnlyCollection<SqlValuePair>) filters);
+                await SelectWithFilterAsync(tableName, (IEnumerable<SqlValuePair>)filters);
 
         public static async Task<SelectResult> SelectWithFilterAsync(
             string tableName,
-            IReadOnlyCollection<SqlValuePair> filters)
+            IEnumerable<SqlValuePair> filters)
             =>
                 await DbRequestDealer.SelectRequestAsync(CreateSelectRequest(tableName, filters));
 
         private static string CreateSelectRequest(
             string tableName,
-            IReadOnlyCollection<SqlValuePair> filters)
+            IEnumerable<SqlValuePair> filters)
             =>
                 $"SELECT * FROM {tableName}" +
-                (filters.Count is not 0
+                (filters.Any()
                     ? $" WHERE {filters.Skip(1).Aggregate($"{filters.First()}", (s, pair) => $"{s} AND {pair}")}"
                     : string.Empty);
 
@@ -53,33 +53,33 @@ namespace SiteDownChecker.DataAccess
 
         #region update
 
-        public static bool TryUpdateById(string tableName, Guid id, IReadOnlyList<SqlValuePair> values) =>
+        public static bool TryUpdateById(string tableName, Guid id, IEnumerable<SqlValuePair> values) =>
             DbRequestDealer.NonQueryRequest(CreateUpdateRequest(tableName, id, values)) is not 0;
 
-        public static async Task<bool> TryUpdateByIdAsync(string tableName, Guid id, IReadOnlyList<SqlValuePair> values)
+        public static async Task<bool> TryUpdateByIdAsync(string tableName, Guid id, IEnumerable<SqlValuePair> values)
             =>
                 await DbRequestDealer.NonQueryRequestAsync(CreateUpdateRequest(tableName, id, values)) is not 0;
 
-        private static string CreateUpdateRequest(string tableName, Guid id, IReadOnlyList<SqlValuePair> values) =>
+        private static string CreateUpdateRequest(string tableName, Guid id, IEnumerable<SqlValuePair> values) =>
             $"UPDATE {tableName} SET "
-            + values.Skip(1).Aggregate($"{values[0]}", (s, pair) => $"{s}, {pair}") +
+            + values.Skip(1).Aggregate($"{values.First()}", (s, pair) => $"{s}, {pair}") +
             $" WHERE Id = {id.ToSqlString()}";
 
         #endregion
 
         #region insert
 
-        public static bool TryInsert(string tableName, IReadOnlyList<SqlValuePair> values) =>
+        public static bool TryInsert(string tableName, IEnumerable<SqlValuePair> values) =>
             DbRequestDealer.NonQueryRequest(CreateInsertRequest(tableName, values)) is not 0;
 
-        public static async Task<bool> TryInsertAsync(string tableName, IReadOnlyList<SqlValuePair> values) =>
+        public static async Task<bool> TryInsertAsync(string tableName, IEnumerable<SqlValuePair> values) =>
             await DbRequestDealer.NonQueryRequestAsync(CreateInsertRequest(tableName, values)) is not 0;
 
-        private static string CreateInsertRequest(string tableName, IReadOnlyList<SqlValuePair> values) =>
+        private static string CreateInsertRequest(string tableName, IEnumerable<SqlValuePair> values) =>
             $"INSERT INTO {tableName} ("
-            + values.Skip(1).Aggregate(values[0].Name, (s, pair) => $"{s}, {pair.Name}")
+            + values.Skip(1).Aggregate(values.First().Name, (s, pair) => $"{s}, {pair.Name}")
             + ") VALUES ("
-            + values.Skip(1).Aggregate(values[0].ValueString, (s, pair) => $"{s}, {pair.ValueString}")
+            + values.Skip(1).Aggregate(values.First().ValueString, (s, pair) => $"{s}, {pair.ValueString}")
             + ")";
 
         #endregion

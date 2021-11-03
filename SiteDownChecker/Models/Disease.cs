@@ -22,12 +22,15 @@ namespace SiteDownChecker.Models
             ISC = ISC
         };
 
-        public Disease FromBusinessModel(SiteDownChecker.Business.Models.Disease businessItem) => new()
-        {
-            Id = businessItem.Id,
-            Name = businessItem.Name,
-            Grade = int.Parse(businessItem.Grade),
-            ISC = businessItem.ISC,
-        };
+        public Disease FromBusinessModel(SiteDownChecker.Business.Models.Disease businessItem) =>
+            businessItem is null
+                ? default
+                : new Disease
+                {
+                    Id = businessItem.Id,
+                    Name = businessItem.Name,
+                    Grade = int.Parse(businessItem.Grade),
+                    ISC = businessItem.ISC,
+                };
     }
 }

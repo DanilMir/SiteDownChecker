@@ -16,7 +16,7 @@ namespace SiteDownChecker.Business.LoginDealing
         /// <returns></returns>
         public static User SetId(User user)
         {
-            var selectResult = DbHelper.SelectWithFilter(typeof(User).ToSqlString(),
+            var selectResult = DbHelper.SelectWithFilter(typeof(User).ToSqlTableName(),
                 new SqlValuePair(nameof(User.Login), user.Login));
             user.Id = selectResult.Count is 0
                 ? Guid.NewGuid()
@@ -31,7 +31,7 @@ namespace SiteDownChecker.Business.LoginDealing
         /// <returns></returns>
         public static bool IsRegistered(User user) =>
             DbHelper.SelectWithFilter(
-                    typeof(User).ToSqlString(),
+                    typeof(User).ToSqlTableName(),
                     new SqlValuePair(nameof(User.Id), user.Id))
                 .Count is not 0;
 
