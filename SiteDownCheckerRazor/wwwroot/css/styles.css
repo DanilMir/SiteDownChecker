@@ -1,0 +1,93 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
+html, body, html * {
+    font-family: 'Roboto', sans-serif;
+}
+
+.Desktop {
+    display: flex;
+    flex-grow: 0;
+    background: rgba(186, 240, 243, 1);
+    box-sizing: border-box;
+    align-items: center;
+    flex-shrink: 0;
+    border-color: transparent;
+    flex-direction: column;
+  }
+  .Body {
+    display: flex;
+    padding: 45px 42px;
+    flex-grow: 0;
+    background: rgba(244, 244, 244, 1);
+    box-sizing: border-box;
+    align-items: center;
+    flex-shrink: 1;
+    border-color: transparent;
+    flex-direction: column;
+  }
+  .MostVisitedSitesSpan {
+    color: black;
+    width: 502px;
+    height: 102px;
+    flex-grow: 0;
+    font-size: 64px;
+    align-self: auto;
+    font-style: normal;
+    text-align: center;
+    
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+    margin: 50;
+  }
+  .BlocksContainer {
+    display: flex;
+    flex-grow: 0;
+    background: transparent;
+    box-sizing: border-box;
+    align-items: flex-start;
+    flex-shrink: 1;
+    border-color: transparent;
+    flex-direction: column;
+  }
+  .SiteBlock {
+    margin: 0 0 62px 0;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 52px;
+    gap: 65px;
+    flex-shrink: 1;
+    width: 1063px;
+    height: 248px;
+    flex-grow: 0;
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(0, 0, 0, 1);
+    border-style: solid;
+    border-width: 1px;
+  }
+  .additionalInfo {
+    color: black;
+    width: auto;
+    height: auto;
+    margin: 0;
+    flex-grow: 0;
+    font-size: 36px;
+    align-self: auto;
+    font-style: normal;
+    text-align: left;
+    font-family: Roboto;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .checkSiteLogo {
+    width: 232px;
+    height: 176px;
+    flex-grow: 0;
+    background: transparent;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-color: transparent;
+  }
+  

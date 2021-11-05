@@ -1,0 +1,26 @@
+.Footer {
+    display: flex;
+    padding: 27px 632px;
+    flex-grow: 0;
+    align-self: stretch;
+    background: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    align-items: center;
+    flex-shrink: 0;
+    border-color: transparent;
+    justify-content: center;
+  }
+  .FooterInfo {
+    color: #A4A4A4;
+    width: auto;
+    height: auto;
+    margin: 0;
+    flex-grow: 0;
+    font-size: 12px;
+    align-self: auto;
+    font-style: normal;
+    text-align: center;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+  }
