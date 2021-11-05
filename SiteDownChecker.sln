@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteDownChecker.Business", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteDownChecker.DataAccess", "SiteDownChecker.DataAccess\SiteDownChecker.DataAccess.csproj", "{14EEFCF5-280D-4907-BE13-5F336D3F1E37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteDownCheckerRazor", "SiteDownCheckerRazor\SiteDownCheckerRazor.csproj", "{D3AAF18A-8A31-4A2E-92A2-7A554D5DE356}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteDownChecker.API", "SiteDownChecker.API\SiteDownChecker.API.csproj", "{FB57BF6D-6CB8-43C7-B395-488982F7594A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3AAF18A-8A31-4A2E-92A2-7A554D5DE356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3AAF18A-8A31-4A2E-92A2-7A554D5DE356}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3AAF18A-8A31-4A2E-92A2-7A554D5DE356}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3AAF18A-8A31-4A2E-92A2-7A554D5DE356}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB57BF6D-6CB8-43C7-B395-488982F7594A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB57BF6D-6CB8-43C7-B395-488982F7594A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB57BF6D-6CB8-43C7-B395-488982F7594A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB57BF6D-6CB8-43C7-B395-488982F7594A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
