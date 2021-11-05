@@ -13,7 +13,7 @@
     justify-content: space-between;
     padding: 0 150px;
   }
-  .logo {
+  .logo,.logo:hover {
     text-decoration: none;
     color: black;
     width: auto;
@@ -37,7 +37,7 @@
 
   }
 
-  .headerLink {
+  .headerLink,.headerLink:hover {
     text-decoration: none;
     color: #847878;
     width: auto;
