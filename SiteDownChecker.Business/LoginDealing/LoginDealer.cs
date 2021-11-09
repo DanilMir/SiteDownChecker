@@ -44,7 +44,7 @@ namespace SiteDownChecker.Business.LoginDealing
         public static bool IsPasswordCorrect(User user) =>
             user.Password == (string) DbHelper.SelectWithFilter(
                 typeof(User).ToSqlTableName(),
-                new SqlValuePair(nameof(User.Id), user.Id))[0, nameof(User.Password)];
+                new SqlValuePair(nameof(User.Id), user.Id))[0, "Password"];
 
         /// <summary>
         /// важно: работает по айди
