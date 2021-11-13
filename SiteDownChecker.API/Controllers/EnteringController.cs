@@ -19,7 +19,7 @@ namespace SiteDownChecker.API.Controllers
         public ActionResult Login([FromBody] User user) =>
             LoginDealer.IsRegistered(LoginDealer.SetId(user))
                 ? LoginDealer.IsPasswordCorrect(user)
-                    ? Ok($"вы успешно вошли. ваш токен: {_jwtAuthManager.GetToken(user.Login)}")
+                    ? Ok($"вы успешно вошли. ваш токен: {_jwtAuthManager.GetToken(user.Id.ToString())}")
                     : Ok("неверный пароль")
                 : Ok("вы не зарегистрированы");
 
