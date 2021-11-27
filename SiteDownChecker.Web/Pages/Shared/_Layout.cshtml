@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SiteDownChecker.Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/styles.css">
+    <link rel="stylesheet" href="~/css/header.css">
+    <link rel="stylesheet" href="~/css/footer.css">
+</head>
+<body class="Desktop">
+    <header class="Header">
+                    <a class="logo" asp-area="" asp-page="/Index">DownChecker</a>
+
+                    <div class='leftHeaderLinks'>
+                        <a class="headerLink" asp-area="" asp-page="/Privacy">Site list</a>
+                        <a class="headerLink" asp-area="" asp-page="/Privacy">About</a>
+                        <img src="images/finderLogo.png" alt="Finder1383" class='headerFinder'>
+                        <a class="headerLink" asp-area="" asp-page="/Authentication">Log In</a>
+                    </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class='Footer'>
+            <span class='FooterInfo'>(c) 11-010 Team</span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
