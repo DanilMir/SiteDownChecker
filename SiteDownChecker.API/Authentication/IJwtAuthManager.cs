@@ -1,7 +1,6 @@
-namespace SiteDownChecker.API.Authentication
+namespace SiteDownChecker.API.Authentication;
+
+public interface IJwtAuthManager
 {
-    public interface IJwtAuthManager
-    {
-        string GetToken(string id);
-    }
+    string GetToken(string id);
 }
