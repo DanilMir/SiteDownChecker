@@ -14,11 +14,24 @@
     <header class="Header">
                     <a class="logo" asp-controller="Home" asp-action="Index">DownChecker</a>
 
-                    <div class='leftHeaderLinks'>
+                    <div class="leftHeaderLinks">
                         <a class="headerLink" asp-controller="Home" asp-action="Privacy">Site list</a>
                         <a class="headerLink" asp-controller="Home" asp-action="Privacy">About</a>
-                        <img src="images/finderLogo.png" alt="Finder1383" class="headerFinder">
-                        <a class="headerLink" asp-controller="Auth" asp-action="Authentication">Log In</a>
+                        <img src="images/finderLogo.png" alt="Finder1383" class="headerFinder">]
+                        @if (Context.Items["User"] is null)
+                        {
+                            <a class="headerLink" asp-controller="Auth" asp-action="Authentication">Log In</a>
+                        }
+                        else
+                        {
+                            <button type="submit" title="Log out" onclick="logout()">log out</button>
+                            <script>
+                                function logout(){
+                                                            document.cookie = 'Authorization' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT';
+                                location.reload();                        
+                                }
+                            </script>
+                        }
                     </div>
     </header>
     <div class="container">
