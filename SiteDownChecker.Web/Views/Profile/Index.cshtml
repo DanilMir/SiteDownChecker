@@ -1,15 +1,14 @@
-﻿@page
-@model SiteDownChecker.Web.Pages.ProfileModel
+﻿@model SiteDownChecker.Web.DB.User
 @{
     <link rel="stylesheet" href="~/css/profile.css">
     <div class="Desktop">
         <div class='Body'>
             <div class="userInfoAndAvatar">
-                <img src="load" alt="userAvatar" class='userAvatar'>
+                <img src="@Model!.AvatarURL" alt="userAvatar" class='userAvatar'>
                 <div class='userInfo'>
-                    <span>Name: </span>
-                    <span>Mail: </span>
-                    <span>Other: </span>
+                    <span>Name: @Model.Name</span>
+                    <span>Mail: @Model.Login</span>
+                    <span>Other: @Model.Id</span>
                 </div>
             </div>
             <div class="lastVisited">
