@@ -9,7 +9,20 @@
         <div class='additionalInfo'>
             <span>@Model.Site.Url</span>
             <span>Down count: @Model.Site.DownCount</span>
-            <button class="downButton">Down Report</button>
+            <form id="reportingForm">
+                <input type="hidden" name="siteId" value="@Model.Site.Id"/>
+                <button class="downButton">Down Report</button>
+            </form>
+            <script>
+                    reportingForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        await fetch('https://localhost:5001/Reports/Report', {
+                            method: 'POST',
+                            body: new FormData(reportingForm)
+                        });
+                        location.reload();
+                    };
+            </script>
         </div>
     </div>
 
@@ -24,11 +37,13 @@
                 <span class="commentText">
                     @comment.Text
                 </span>
-                <form id="deleteComment@(comment.Id)">
-                    <input type="hidden" name="commentId" value="@comment.Id"/>
-                    <button class="deleteComment" type="submit">x</button>
-                </form>
-                <script>
+                @if (Model.UserId == comment.Writer.Id)
+                {
+                    <form id="deleteComment@(comment.Id)">
+                        <input type="hidden" name="commentId" value="@comment.Id"/>
+                        <button class="deleteComment" type="submit">x</button>
+                    </form>
+                    <script>
                                             deleteComment@(comment.Id).onsubmit = async (e) => {
                                                 e.preventDefault();
                                                 let xmlHttp = new XMLHttpRequest();
@@ -36,7 +51,8 @@
                                                 await xmlHttp.send(new FormData(deleteComment@(comment.Id)));
                                                 setTimeout(function(){ location.reload()}, 100);
                                             };
-                </script>
+                    </script>
+                }
             </div>
         }
         <form id="sendCommentForm" class="sendComment">

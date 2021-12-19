@@ -31,6 +31,7 @@ public class HomeController : Controller
             null => BadRequest(),
             _ => View(new SiteInfoModel
             {
+                UserId = (HttpContext.Items["User"] as User)!.Id,
                 Site = site,
                 Comments = comments
             })
@@ -47,6 +48,7 @@ public class HomeController : Controller
     public readonly struct SiteInfoModel
     {
         public Site Site { get; init; }
+        public int UserId { get; init; }
         public IQueryable<BetterComment> Comments { get; init; }
     }
 }
