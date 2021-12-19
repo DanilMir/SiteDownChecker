@@ -16,7 +16,10 @@
     <a class="logo" asp-controller="Home" asp-action="Index">DownChecker</a>
 
     <div class="leftHeaderLinks">
-        <a class="headerLink" asp-controller="Sites" asp-action="Create">Add site</a>
+        @if (Context.Items["User"] is not null)
+        {
+            <a class="headerLink" asp-controller="Sites" asp-action="Create">Add site</a>
+        }
         <a class="headerLink" asp-controller="Home" asp-action="Privacy">About</a>
         @if (Context.Items["User"] is User user)
         {
