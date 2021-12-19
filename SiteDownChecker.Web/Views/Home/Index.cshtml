@@ -7,7 +7,7 @@
             @foreach (var site in Model!)
             {
                 <div class='SiteBlock'>
-                    <a src="https://localhost:5001/Home/Site?siteId=@site.Id">
+                    <a href="https://localhost:5001/Home/Site?siteId=@site.Id">
                         <img src="@site.LogoUrl" alt="siteLogo" class='checkSiteLogo'>
                     </a>
                     <div class='additionalInfo'> 

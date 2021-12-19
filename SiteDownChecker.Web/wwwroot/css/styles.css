@@ -179,13 +179,13 @@ button:active {
     position: absolute;
     display: flex;
     top: 0;
-    right: 15;
+    right: 15px;
     font-size: 15px;
     width: 15px;
     height: 15px;
     align-items: center;
     justify-content: center;
-    background-color: none;
+    background-color: white;
     border: none;
 }
 

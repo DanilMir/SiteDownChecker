@@ -11,27 +11,42 @@ public class HomeController : Controller
     public HomeController(SiteDownContext dataContext) =>
         _dataContext = dataContext;
 
-    public IActionResult Index()
-    {
-        _dataContext.Sites.Add(new Site
-        {
-            Url = "vk.com",
-            LogoUrl = "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia&hl=ru&gl=US",
-            DownCount = 13458
-        });
-        _dataContext.SaveChanges();
-        return View(_dataContext.Sites);
-    }
+    public IActionResult Index() => View(_dataContext.Sites);
 
     public IActionResult Privacy() => View();
 
     public IActionResult Site(int siteId)
     {
         var site = _dataContext.Sites.FirstOrDefault(s => s.Id == siteId);
+        var comments = _dataContext.Comments
+            .Where(c => c.SiteId == siteId)
+            .Select(c => new BetterComment
+            {
+                Id = c.Id,
+                Writer = _dataContext.Users.FirstOrDefault(u => u.Id == c.WriterId),
+                Text = c.Text
+            });
         return site switch
         {
             null => BadRequest(),
-            _ => View(site)
+            _ => View(new SiteInfoModel
+            {
+                Site = site,
+                Comments = comments
+            })
         };
+    }
+
+    public readonly struct BetterComment
+    {
+        public int Id { get; init; }
+        public User Writer { get; init; }
+        public string Text { get; init; }
+    }
+
+    public readonly struct SiteInfoModel
+    {
+        public Site Site { get; init; }
+        public IQueryable<BetterComment> Comments { get; init; }
     }
 }

@@ -1,0 +1,58 @@
+﻿@model SiteDownChecker.Web.Controllers.HomeController.SiteInfoModel
+
+<div class="Desktop">
+
+    <span class='MostVisitedSitesSpan'>@Model.Site.Url</span>
+
+    <div class="siteInfo">
+        <img style="align-self: flex-start;" src="@Model.Site.LogoUrl" alt="siteLogo" class='checkSiteLogo'>
+        <div class='additionalInfo'>
+            <span>@Model.Site.Url</span>
+            <span>Down count: @Model.Site.DownCount</span>
+            <button class="downButton">Down Report</button>
+        </div>
+    </div>
+
+    <div class="commentSection">
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="comment">
+                <div class="commentatorInfo">
+                    <img class="avatar" src="@comment.Writer.AvatarURL" alt="userAvatar" class='userAvatar'>
+                    @comment.Writer.Name
+                </div>
+                <span class="commentText">
+                    @comment.Text
+                </span>
+                <form id="deleteComment@(comment.Id)">
+                    <input type="hidden" name="commentId" value="@comment.Id"/>
+                    <button class="deleteComment" type="submit">x</button>
+                </form>
+                <script>
+                                            deleteComment@(comment.Id).onsubmit = async (e) => {
+                                                e.preventDefault();
+                                                let xmlHttp = new XMLHttpRequest();
+                                                xmlHttp.open("post", "https://localhost:5001/Comments/Delete"); 
+                                                await xmlHttp.send(new FormData(deleteComment@(comment.Id)));
+                                                setTimeout(function(){ location.reload()}, 100);
+                                            };
+                </script>
+            </div>
+        }
+        <form id="sendCommentForm" class="sendComment">
+            <input type="hidden" name="siteId" value="@Model.Site.Id"/>
+            <textarea name="text" class="sendCommentInput" placeholder="Comment..."></textarea>
+            <button class="sendCommentButton" type="submit">Send</button>
+        </form>
+        <script>
+                    sendCommentForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        await fetch('https://localhost:5001/Comments/Write', {
+                            method: 'POST',
+                            body: new FormData(sendCommentForm)
+                        });
+                        location.reload();
+                    };
+    </script>
+    </div>
+</div>
