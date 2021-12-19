@@ -1,6 +1,10 @@
 ﻿@page
 @model SiteDownChecker.Web.Pages.RegistrationModel
 @{
+    
+<div class="Desktop">
+    <div class="Body">
+
     <link rel="stylesheet" href="~/css/auth.css">
     <form id="registerForm" class="authForm">
         <input class="authInput" type="text" placeholder="login" name="login">
@@ -21,4 +25,6 @@
                         document.location = 'https://localhost:5001/';
                     };
     </script>
+    </div>
+</div>
 }
