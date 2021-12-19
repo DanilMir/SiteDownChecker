@@ -1,4 +1,5 @@
-﻿@model SiteDownChecker.Web.DB.User
+﻿@using SiteDownChecker.Web.DB
+@model SiteDownChecker.Web.DB.User
 @{
     <link rel="stylesheet" href="~/css/profile.css">
     <div class="Desktop">
@@ -11,7 +12,16 @@
                     <span>ID: @Model.Id</span>
                 </div>
             </div>
-            <button class="editProfile" type="submit">Edit profile</button>
+            @if (Context.Items["User"] is User user && Model.Id == user.Id)
+            {
+                <button class="editProfile" type="submit" onclick="goToEdit()">Edit profile</button>
+                <script>
+                    function goToEdit() {
+                        document.location = "https://localhost:5001/Profile/Edit";
+                    }
+                </script>
+            }
+            
          </div>
     </div>
 }

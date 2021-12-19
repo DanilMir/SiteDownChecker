@@ -12,7 +12,7 @@ public class ProfileController : Controller
     public ProfileController(SiteDownContext dataContext) =>
         _dataContext = dataContext;
 
-    [Authorize]
+    [HttpGet]
     public IActionResult Index(int userId)
     {
         var user = userId is default(int)
@@ -21,5 +21,22 @@ public class ProfileController : Controller
         if (user is null)
             return BadRequest();
         return View(user);
+    }
+
+    [Authorize, HttpGet]
+    public IActionResult Edit() => View(HttpContext.Items["User"]);
+
+    [Authorize, HttpPost]
+    public IActionResult Edit([FromForm] User user)
+    {
+        var currentUser = (User) HttpContext.Items["User"]!;
+        if (user.Login != string.Empty && user.Login is not null && _dataContext.Users.All(u => u.Login != user.Login))
+            currentUser.Login = user.Login;
+        if (user.Name != string.Empty && user.Name is not null)
+            currentUser.Name = user.Name;
+        if (user.AvatarURL != string.Empty && user.AvatarURL is not null) currentUser.AvatarURL = user.AvatarURL;
+        _dataContext.Users.Update(currentUser);
+        _dataContext.SaveChanges();
+        return Ok();
     }
 }
