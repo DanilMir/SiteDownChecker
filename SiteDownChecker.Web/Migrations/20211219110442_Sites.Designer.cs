@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SiteDownChecker.Web.DB;
 
@@ -10,9 +11,10 @@ using SiteDownChecker.Web.DB;
 namespace SiteDownChecker.Web.Migrations
 {
     [DbContext(typeof(SiteDownContext))]
-    partial class SiteDownContextModelSnapshot : ModelSnapshot
+    [Migration("20211219110442_Sites")]
+    partial class Sites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,4 +7,5 @@ public class SiteDownContext : BaseDbContext
     protected override string Catalog => Config.SiteDownCatalog;
     
     public DbSet<User> Users { get; set; }
+    public DbSet<Site> Sites { get; set; }
 }
