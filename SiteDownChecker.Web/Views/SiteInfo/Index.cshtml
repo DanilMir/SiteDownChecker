@@ -1,0 +1,27 @@
+﻿@model IQueryable<SiteDownChecker.Web.DB.Site>
+
+<div class="Desktop">
+    
+    <span class='MostVisitedSitesSpan'>@site.Url</span>
+      
+    <div class="siteInfo">
+        <img style="align-self: flex-start;" src="@site.LogoUrl" alt="siteLogo" class='checkSiteLogo'>
+        <div class='additionalInfo'>
+          <span>@site.Url</span>
+          <span>Down count: @site.DownCount</span>
+          <button class="downButton">Down Report</button>
+        </div>
+      </div>
+
+      <div class="commentSection">
+        <div class="comment">
+          <div class="commentatorInfo">
+            <img class="avatar" src="@Model!.AvatarURL" alt="userAvatar" class='userAvatar'>
+            @Model.Name
+          </div>
+          <span class="commentText">
+            @Comment.Text
+          </span>
+        </div>
+      </div>
+</div>

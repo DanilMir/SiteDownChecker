@@ -7,11 +7,13 @@
             @foreach (var site in Model!)
             {
                 <div class='SiteBlock'>
-                    @site.Url
                     <a src="https://localhost:5001/Home/Site?siteId=@site.Id">
                         <img src="@site.LogoUrl" alt="siteLogo" class='checkSiteLogo'>
                     </a>
-                    <div class='additionalInfo'>Down count: @site.DownCount</div>
+                    <div class='additionalInfo'> 
+                        <span>@site.Url</span>
+                        <span>Down count: @site.DownCount</span>
+                    </div>
                 </div>
             }
         </div>
