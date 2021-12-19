@@ -21,7 +21,7 @@
         @if (Context.Items["User"] is User user)
         {
             <a asp-controller="Profile" asp-action="Index">
-                <img src="@user.AvatarURL" alt="Finder1383" class="headerFinder">
+                <img class="avatar" src="@user.AvatarURL" alt="Finder1383" class="headerFinder">
             </a>
         }
         @if (Context.Items["User"] is null)
@@ -30,7 +30,7 @@
         }
         else
         {
-            <button type="submit" title="Log out" onclick="logout()">log out</button>
+            <button class="logOutButton" type="submit" title="Log out" onclick="logout()">Log out</button>
             <script>
                                 function logout(){
                                                             document.cookie = 'Authorization' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT';

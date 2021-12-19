@@ -24,7 +24,6 @@
     align-self: center;
     font-style: normal;
     text-align: center;
-    font-family: Roboto;
     font-weight: 400;
     line-height: normal;
     font-stretch: normal;
@@ -48,7 +47,6 @@
     align-self: center;
     font-style: normal;
     text-align: center;
-    font-family: Roboto;
     font-weight: 400;
     line-height: normal;
     font-stretch: normal;
@@ -64,3 +62,25 @@
     flex-shrink: 0;
     border-color: transparent;
   }
+
+.logOutButton {
+    text-decoration: none;
+    color: #847878;
+    width: auto;
+    height: auto;
+    margin: 0;
+    flex-grow: 0;
+    font-size: 24px;
+    align-self: center;
+    font-style: normal;
+    text-align: center;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+    border: none;
+    background-color: white;
+}
+
+    .logOutButton:hover, .logOutButton:active {
+        background-color: white;
+    }
