@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace SiteDownChecker.Web.Pages
 {
-    public class IndexModel : PageModel
+    public class SiteInfoModel : PageModel
     {
         private string block;
         private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public SiteInfoModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
         }
