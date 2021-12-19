@@ -31,7 +31,7 @@ public class HomeController : Controller
             null => BadRequest(),
             _ => View(new SiteInfoModel
             {
-                UserId = (HttpContext.Items["User"] as User)!.Id,
+                UserId = HttpContext.Items["User"] is User user ? user.Id : 0,
                 Site = site,
                 Comments = comments
             })
