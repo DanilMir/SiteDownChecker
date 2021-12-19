@@ -19,7 +19,6 @@ namespace SiteDownChecker.Web
         {
             services.AddDbContext<SiteDownContext>();
             
-            services.AddRazorPages();
             services.AddControllersWithViews();
         }
 

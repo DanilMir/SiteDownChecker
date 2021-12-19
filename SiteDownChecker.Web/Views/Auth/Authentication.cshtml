@@ -1,0 +1,21 @@
+﻿
+@{
+    <link rel="stylesheet" href="~/css/auth.css">
+    <form id="loginForm" class="authForm">
+        <input class="authInput" type="text" placeholder="login" name="login">
+        <input class="authInput" type="password" placeholder="password" name="password">
+        <a class="regLink" asp-controller="Auth" asp-action="Registration">Create new profile</a>
+        <input class="authButton" type="submit" text="Submit">
+    </form>
+    
+    <script>
+                    loginForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        await fetch('https://localhost:5001/Entering/Login', {
+                            method: 'POST',
+                            body: new FormData(loginForm)
+                        });
+                        location.reload();
+                    };
+    </script>
+}

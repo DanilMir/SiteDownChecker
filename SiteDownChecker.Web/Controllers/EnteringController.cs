@@ -39,8 +39,6 @@ public class EnteringController : ControllerBase
             return BadRequest();
         }
 
-        if (user.PhoneNumber is < 70000000000 or > 90000000000)
-            throw new Exception("bad phone number");
         Expression<Func<User, bool>> searchingExpression = u => u.Login == user.Login;
         if (_dataContext.Users.Any(searchingExpression))
             throw new Exception("already registered");

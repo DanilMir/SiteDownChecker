@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SiteDownChecker.Web.DB;
 
@@ -10,10 +9,7 @@ public class User
     [Required] public string Login { get; set; }
     [Required] public string Password { get; set; }
     [Required] public string Name { get; set; }
-    [Required] public string Surname { get; set; }
-    [Required] public long PhoneNumber { get; set; }
     [Required] public string AvatarURL { get; set; }
     
-    [NotMapped] public string FullName => $"{Name} {Surname}";
-    public override string ToString() => $"{Login} {Password} {Name} {Surname} {PhoneNumber}";
+    public override string ToString() => $"{Login} {Password} {Name} {AvatarURL}";
 }

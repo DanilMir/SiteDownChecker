@@ -1,0 +1,24 @@
+﻿@page
+@model SiteDownChecker.Web.Pages.RegistrationModel
+@{
+    <link rel="stylesheet" href="~/css/auth.css">
+    <form id="registerForm" class="authForm">
+        <input class="authInput" type="text" placeholder="login" name="login">
+        <input class="authInput" type="password" placeholder="password" name="password">
+        <input class="authInput" type="text" placeholder="Name" name="Name"/>
+        <input class="authInput" type="text" placeholder="Avatar URL" name="AvatarURL"/>
+        <a class="regLink" asp-controller="Auth" asp-action="Authentication">Already have profile? Log In</a>
+        <input class="authButton" type="submit" text="Submit">
+    </form>
+    
+    <script>
+                    registerForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        await fetch('https://localhost:5001/Entering/Register', {
+                            method: 'POST',
+                            body: new FormData(registerForm)
+                        });
+                        location.reload();
+                    };
+    </script>
+}
