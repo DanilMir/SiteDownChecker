@@ -1,29 +1,17 @@
-﻿@page
+﻿@model IQueryable<SiteDownChecker.Web.DB.Site>
 
 <div class="Desktop">
     <div class='Body'>
         <span class='MostVisitedSitesSpan'>Most visited sites</span>
         <div class='BlocksContainer'>
-            <div class='SiteBlock'>
-                <img src="get from database" alt="siteLogo" class='checkSiteLogo'>
-                <div class='additionalInfo'>Additional Info</div>
-            </div>
-            <div class='SiteBlock'>
-                <img src="get from database" alt="siteLogo" class='checkSiteLogo'>
-                <div class='additionalInfo'>Additional Info</div>
-            </div>
-            <div class='SiteBlock'>
-                <img src="get from database" alt="siteLogo" class='checkSiteLogo'>
-                <div class='additionalInfo'>Additional Info</div>
-            </div>
-            <div class='SiteBlock'>
-                <img src="get from database" alt="siteLogo" class='checkSiteLogo'>
-                <div class='additionalInfo'>Additional Info</div>
-            </div>
-            <div class='SiteBlock'>
-                <img src="get from database" alt="siteLogo" class='checkSiteLogo'>
-                <div class='additionalInfo'>Additional Info</div>
-            </div>
+            @foreach (var site in Model!)
+            {
+                <div class='SiteBlock'>
+                    @site.Url
+                    <img src="@site.LogoUrl" alt="siteLogo" class='checkSiteLogo'>
+                    <div class='additionalInfo'>Down count: @site.DownCount</div>
+                </div>
+            }
         </div>
     </div>
 </div>
