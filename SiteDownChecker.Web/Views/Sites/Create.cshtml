@@ -1,0 +1,22 @@
+﻿@model IQueryable<SiteDownChecker.Web.DB.Site>
+
+<link rel="stylesheet" href="~/css/auth.css">
+<div class="Desktop">
+    <div class="Body">
+        <form id="addSite" class="authForm">
+            <input class="authInput" type="text" placeholder="URL" name="URL">
+            <input class="authInput" type="text" placeholder="Logo" name="LogoUrl">
+            <input class="authButton" type="submit" text="Submit">
+        </form>
+        <script>
+                    addSite.onsubmit = async (e) => {
+                        e.preventDefault();
+                        await fetch('https://localhost:5001/Sites/Create', {
+                            method: 'POST',
+                            body: new FormData(addSite)
+                        });
+                        document.location='https://localhost:5001/';
+                    };
+        </script>
+    </div>
+</div>
