@@ -3,26 +3,38 @@
     <link rel="stylesheet" href="~/css/profile.css">
     <div class="Desktop">
         <div class='Body'>
-            <div class="userInfoAndAvatar">
-                <img src="@Model!.AvatarURL" alt="userAvatar" class='userAvatar'>
-                <div>
+            <form id="profileEditForm">
+                <div class="userInfoAndAvatar">
+                    <img src="@Model!.AvatarURL" alt="userAvatar" class='userAvatar'>
+                    <div>
                         <span>Name: </span>
-                        <input type="text">
+                        <input type="text" name="Name">
                     </div>
                     <div>
                         <span>Mail: </span>
-                        <input type="email">
+                        <input type="email" name="Login">
                     </div>
                     <div>
                         <span>AvatarLink: </span>
-                        <input type="text">
+                        <input type="text" name="AvatarURL">
                     </div>
                     <div>
                         <span>Password: </span>
-                        <input type="password">
+                        <input type="password" name="Password">
                     </div>
                 </div>
-            <button class="editProfile" type="submit">Save</button>
-         </div>
+                <button class="editProfile" type="submit">Save</button>
+            </form>
+            <script>
+                    profileEditForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        await fetch('https://localhost:5001/Profile/Edit', {
+                            method: 'POST',
+                            body: new FormData(profileEditForm)
+                        });
+                        location.reload();
+                    };
+            </script>
+        </div>
     </div>
 }
