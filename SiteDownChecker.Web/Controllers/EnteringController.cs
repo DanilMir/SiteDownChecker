@@ -1,34 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SiteDownChecker.Web.Authentication;
-using SiteDownChecker.Business.LoginDealing;
-using SiteDownChecker.Business.Models;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
+using SiteDownChecker.Web.DB;
+using SiteDownChecker.Web.Services;
 
-// ReSharper disable StringLiteralTypo
+namespace SiteDownChecker.Web.Controllers;
 
-namespace SiteDownChecker.Web.Controllers
+public class EnteringController : ControllerBase
 {
-    [Route("[controller]")]
-    public class EnteringController : Controller
+    private readonly SiteDownContext _dataContext;
+
+    public EnteringController(SiteDownContext dataContext) =>
+        _dataContext = dataContext;
+
+    [HttpPost]
+    public IActionResult Login([FromForm] UserLoginPassword logPass)
     {
-        private readonly IJwtAuthManager _jwtAuthManager;
+        var user = DbHelper.GetUserWithId(logPass.Login, logPass.Password, _dataContext);
+        if (user is null) return BadRequest();
+        HttpContext.Response.Cookies.Append("Authorization", JwtGenerator.GenerateJwtToken(user.Id));
+        return Ok();
+    }
 
-        public EnteringController(IJwtAuthManager jwtAuthManager) =>
-            _jwtAuthManager = jwtAuthManager;
+    [HttpPost]
+    public IActionResult Register([FromForm] User user)
+    {
+        Console.WriteLine($"new user: {user}");
 
-        [HttpPost, Route(nameof(Login))]
-        public ActionResult Login([FromBody] User user) =>
-            LoginDealer.IsRegistered(LoginDealer.SetId(user))
-                ? LoginDealer.IsPasswordCorrect(user)
-                    ? Ok($"вы успешно вошли. ваш токен: {_jwtAuthManager.GetToken(user.Id.ToString())}")
-                    : Ok("неверный пароль")
-                : Ok("вы не зарегистрированы");
+        if (!Regex.IsMatch(user.Login, @"[a-z0-9._%+-]+\@[a-z0-9.-]+\.[a-z]{2,4}$") ||
+            !Regex.IsMatch(user.Password, @"^(?=.*?[A-Z]).{8,}"))
+        {
+            if (!Regex.IsMatch(user.Login, @"[a-z0-9._%+-]+\@[a-z0-9.-]+\.[a-z]{2,4}$"))
+                Console.WriteLine("bad login");
+            if (!Regex.IsMatch(user.Password, @"^(?=.*?[A-Z]).{8,}"))
+                Console.WriteLine("bad pass");
+            return BadRequest();
+        }
 
-        [HttpPost, Route(nameof(Register))]
-        public ActionResult Register([FromBody] User user) =>
-            LoginDealer.IsRegistered(LoginDealer.SetId(user))
-                ? Ok("ты уже зареган")
-                : LoginDealer.TryRegisterNewUser(user)
-                    ? Ok("вы успешно зарегистрировались")
-                    : Ok("чот пошло не так");
+        if (user.PhoneNumber is < 70000000000 or > 90000000000)
+            throw new Exception("bad phone number");
+        Expression<Func<User, bool>> searchingExpression = u => u.Login == user.Login;
+        if (_dataContext.Users.Any(searchingExpression))
+            throw new Exception("already registered");
+        _dataContext.Users.Add(user);
+        _dataContext.SaveChanges();
+        user = _dataContext.Users.First(searchingExpression);
+        HttpContext.Response.Cookies.Append("Authorization", JwtGenerator.GenerateJwtToken(user.Id));
+        return Ok();
+    }
+
+    public class UserLoginPassword
+    {
+        public string Login { get; set; }
+        public string Password { get; set; }
     }
 }

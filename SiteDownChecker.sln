@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteDownChecker.Business", "SiteDownChecker.Business\SiteDownChecker.Business.csproj", "{B754D535-AC0B-45BF-9221-72C7C2C69DE4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteDownChecker.DataAccess", "SiteDownChecker.DataAccess\SiteDownChecker.DataAccess.csproj", "{14EEFCF5-280D-4907-BE13-5F336D3F1E37}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteDownChecker.Web", "SiteDownChecker.Web\SiteDownChecker.Web.csproj", "{E2CB0154-8956-4D0D-9B57-51C102978552}"
 EndProject
 Global
@@ -15,14 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B754D535-AC0B-45BF-9221-72C7C2C69DE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B754D535-AC0B-45BF-9221-72C7C2C69DE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B754D535-AC0B-45BF-9221-72C7C2C69DE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B754D535-AC0B-45BF-9221-72C7C2C69DE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14EEFCF5-280D-4907-BE13-5F336D3F1E37}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E2CB0154-8956-4D0D-9B57-51C102978552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2CB0154-8956-4D0D-9B57-51C102978552}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2CB0154-8956-4D0D-9B57-51C102978552}.Release|Any CPU.ActiveCfg = Release|Any CPU
