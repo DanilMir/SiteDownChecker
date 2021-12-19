@@ -3,9 +3,10 @@
     <link rel="stylesheet" href="~/css/profile.css">
     <div class="Desktop">
         <div class='Body'>
-            <form id="profileEditForm">
+            <form class="Body" id="profileEditForm">
                 <div class="userInfoAndAvatar">
                     <img src="@Model!.AvatarURL" alt="userAvatar" class='userAvatar'>
+                    <div class='userInfo'>
                     <div>
                         <span>Name: </span>
                         <input type="text" name="Name">
@@ -21,6 +22,7 @@
                     <div>
                         <span>Password: </span>
                         <input type="password" name="Password">
+                    </div>
                     </div>
                 </div>
                 <button class="editProfile" type="submit">Save</button>
