@@ -8,4 +8,5 @@ public class SiteDownContext : BaseDbContext
     
     public DbSet<User> Users { get; set; }
     public DbSet<Site> Sites { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 }
