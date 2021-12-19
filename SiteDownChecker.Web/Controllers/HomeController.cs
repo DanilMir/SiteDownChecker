@@ -11,7 +11,18 @@ public class HomeController : Controller
     public HomeController(SiteDownContext dataContext) =>
         _dataContext = dataContext;
 
-    public IActionResult Index() => View(_dataContext.Sites);
+    public IActionResult Index()
+    {
+        _dataContext.Sites.Add(new Site
+        {
+            Url = "vk.com",
+            LogoUrl = "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia&hl=ru&gl=US",
+            DownCount = 13458
+        });
+        _dataContext.SaveChanges();
+        return View(_dataContext.Sites);
+    }
+
     public IActionResult Privacy() => View();
 
     public IActionResult Site(int siteId)
