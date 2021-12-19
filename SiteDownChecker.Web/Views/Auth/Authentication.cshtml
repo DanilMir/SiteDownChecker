@@ -1,5 +1,5 @@
 ﻿
-@{
+
     <link rel="stylesheet" href="~/css/auth.css">
     <form id="loginForm" class="authForm">
         <input class="authInput" type="text" placeholder="login" name="login">
@@ -15,7 +15,6 @@
                             method: 'POST',
                             body: new FormData(loginForm)
                         });
-                        location.reload();
+                        document.location ='https://localhost:5001/';
                     };
     </script>
-}
