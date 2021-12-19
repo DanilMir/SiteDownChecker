@@ -1,0 +1,28 @@
+﻿@model SiteDownChecker.Web.DB.User
+@{
+    <link rel="stylesheet" href="~/css/profile.css">
+    <div class="Desktop">
+        <div class='Body'>
+            <div class="userInfoAndAvatar">
+                <img src="@Model!.AvatarURL" alt="userAvatar" class='userAvatar'>
+                <div>
+                        <span>Name: </span>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <span>Mail: </span>
+                        <input type="email">
+                    </div>
+                    <div>
+                        <span>AvatarLink: </span>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <span>Password: </span>
+                        <input type="password">
+                    </div>
+                </div>
+            <button class="editProfile" type="submit">Save</button>
+         </div>
+    </div>
+}
