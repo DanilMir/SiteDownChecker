@@ -2,11 +2,11 @@
 
 <div class="Desktop">
 
-    <span class='MostVisitedSitesSpan'>@Model.Site.Url</span>
+    <span class="MostVisitedSitesSpan">@Model.Site.Url</span>
 
     <div class="siteInfo">
         <img style="align-self: flex-start;" src="@Model.Site.LogoUrl" alt="siteLogo" class='checkSiteLogo'>
-        <div class='additionalInfo'>
+        <div class="additionalInfo">
             <span>@Model.Site.Url</span>
             <span>Down count: @Model.Site.DownCount</span>
             <form id="reportingForm">
@@ -31,7 +31,9 @@
         {
             <div class="comment">
                 <div class="commentatorInfo">
-                    <img class="avatar" src="@comment.Writer.AvatarURL" alt="userAvatar" class='userAvatar'>
+                    <a href="https://localhost:5001/Profile?userId=@comment.Writer.Id">
+                        <img src="@comment.Writer.AvatarURL" alt="userAvatar" class='userAvatar avatar'>
+                    </a>
                     @comment.Writer.Name
                 </div>
                 <span class="commentText">
