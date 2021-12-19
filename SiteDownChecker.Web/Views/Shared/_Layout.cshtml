@@ -1,55 +1,61 @@
-﻿<!DOCTYPE html>
+﻿@using SiteDownChecker.Web.DB
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - SiteDownChecker.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
     <link rel="stylesheet" href="~/css/styles.css">
     <link rel="stylesheet" href="~/css/header.css">
     <link rel="stylesheet" href="~/css/footer.css">
 </head>
 <body class="Desktop">
-    <header class="Header">
-                    <a class="logo" asp-controller="Home" asp-action="Index">DownChecker</a>
+<header class="Header">
+    <a class="logo" asp-controller="Home" asp-action="Index">DownChecker</a>
 
-                    <div class="leftHeaderLinks">
-                        <a class="headerLink" asp-controller="Home" asp-action="Privacy">Site list</a>
-                        <a class="headerLink" asp-controller="Home" asp-action="Privacy">About</a>
-                        <img src="images/finderLogo.png" alt="Finder1383" class="headerFinder">]
-                        @if (Context.Items["User"] is null)
-                        {
-                            <a class="headerLink" asp-controller="Auth" asp-action="Authentication">Log In</a>
-                        }
-                        else
-                        {
-                            <button type="submit" title="Log out" onclick="logout()">log out</button>
-                            <script>
+    <div class="leftHeaderLinks">
+        <a class="headerLink" asp-controller="Home" asp-action="Privacy">Site list</a>
+        <a class="headerLink" asp-controller="Home" asp-action="Privacy">About</a>
+        @if (Context.Items["User"] is User user)
+        {
+            <a asp-controller="Profile" asp-action="Index">
+                <img src="@user.AvatarURL" alt="Finder1383" class="headerFinder">
+            </a>
+        }
+        @if (Context.Items["User"] is null)
+        {
+            <a class="headerLink" asp-controller="Auth" asp-action="Authentication">Log In</a>
+        }
+        else
+        {
+            <button type="submit" title="Log out" onclick="logout()">log out</button>
+            <script>
                                 function logout(){
                                                             document.cookie = 'Authorization' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT';
                                 location.reload();                        
                                 }
                             </script>
-                        }
-                    </div>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        }
     </div>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
 
-    <footer class="border-top footer text-muted">
-        <div class='Footer'>
-            <span class='FooterInfo'>(c) 11-010 Team</span>
-        </div>
-    </footer>
+<footer class="border-top footer text-muted">
+    <div class='Footer'>
+        <span class='FooterInfo'>(c) 11-010 Team</span>
+    </div>
+</footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
-    @RenderSection("Scripts", required: false)
+@RenderSection("Scripts", required: false)
 </body>
 </html>
