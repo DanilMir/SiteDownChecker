@@ -1,10 +1,11 @@
 ﻿@page
-@model AuthenticationModel
+@model SiteDownChecker.Web.Pages.AuthenticationModel
 @{
     <link rel="stylesheet" href="~/css/auth.css">
     <form class="authForm" action="https://localhost:5001/Entering/Login" method="post" enctype="application/x-www-form-urlencoded">
             <input class="authInput" type="text" placeholder="login" name="login">
             <input class="authInput" type="password" placeholder="password" name="password">
+            <a class="regLink" asp-area="" asp-page="/registration">Create new profile</a>
             <input class="authButton" type="submit" text="Submit">
     </form>
 }

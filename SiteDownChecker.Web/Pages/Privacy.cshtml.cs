@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SiteDownCheckerRazor.Pages
+namespace SiteDownChecker.Web.Pages
 {
-    public class PrivacyModel1 : PageModel
+    public class PrivacyModel : PageModel
     {
         private readonly ILogger<PrivacyModel> _logger;
 
-        public PrivacyModel1(ILogger<PrivacyModel> logger)
+        public PrivacyModel(ILogger<PrivacyModel> logger)
         {
             _logger = logger;
         }

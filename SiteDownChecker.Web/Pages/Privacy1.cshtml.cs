@@ -6,20 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SiteDownCheckerRazor.Pages
+namespace SiteDownChecker.Web.Pages
 {
-    public class IndexModel : PageModel
+    public class PrivacyModel1 : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<PrivacyModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public PrivacyModel1(ILogger<PrivacyModel> logger)
         {
             _logger = logger;
         }
 
         public void OnGet()
         {
-
         }
     }
 }
