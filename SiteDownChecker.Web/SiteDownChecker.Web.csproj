@@ -26,11 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SiteDownChecker.Business\SiteDownChecker.Business.csproj" />
-    <ProjectReference Include="..\SiteDownChecker.DataAccess\SiteDownChecker.DataAccess.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Pages\Authentication.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
