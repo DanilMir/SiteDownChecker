@@ -11,7 +11,7 @@ public class HomeController : Controller
     public HomeController(SiteDownContext dataContext) =>
         _dataContext = dataContext;
 
-    public IActionResult Index() => View(_dataContext.Sites);
+    public IActionResult Index() => View(_dataContext.Sites.OrderBy(s => -s.DownCount));
 
     public IActionResult Privacy() => View();
 
